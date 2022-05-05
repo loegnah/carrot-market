@@ -1,19 +1,43 @@
 import { NextPage } from "next";
 import { useState } from "react";
 
+const cls = (...classNames: string[]) => {
+  return classNames.join(" ");
+};
+
 const Enter: NextPage = () => {
   const [method, setMethod] = useState<"email" | "phone">("email");
   const onEmailClick = () => setMethod("email");
   const onPhoneClick = () => setMethod("phone");
   return (
-    <div>
-      <h3>Enter to Carrot</h3>
-      <div>
-        <div>
-          <h5>Enter using:</h5>
-          <div>
-            <button onClick={onEmailClick}>Email</button>
-            <button onClick={onPhoneClick}>Phone</button>
+    <div className="mt-16">
+      <h3 className="text-3xl font-bold text-center">Enter to Carrot</h3>
+      <div className="mt-8">
+        <div className="flex flex-col items-center">
+          <h5 className="text-sm text-gray-500 font-medium">Enter using:</h5>
+          <div className="grid grid-cols-2 gap-8 w-full border-b mt-8">
+            <button
+              className={cls(
+                "pb-4 font-medium text-gray-500",
+                method === "email"
+                  ? "text-orange-400 border-b-2 border-orange-500"
+                  : ""
+              )}
+              onClick={onEmailClick}
+            >
+              Email
+            </button>
+            <button
+              className={cls(
+                "pb-4 font-medium text-gray-500",
+                method === "phone"
+                  ? "text-orange-400 border-b-2 border-orange-500"
+                  : ""
+              )}
+              onClick={onPhoneClick}
+            >
+              Phone
+            </button>
           </div>
         </div>
         <form>
