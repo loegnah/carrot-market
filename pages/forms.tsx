@@ -13,16 +13,20 @@ type LoginForm = {
 };
 
 const Forms: NextPage = () => {
-  const { register, handleSubmit } = useForm<LoginForm>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginForm>({
+    mode: "onSubmit",
+  });
 
-  const onValid: SubmitHandler<LoginForm> = (data, event) => {
+  const onValid: SubmitHandler<LoginForm> = (data) => {
     console.log(data);
-    console.log(event);
   };
 
-  const onInValid: SubmitErrorHandler<LoginForm> = (errors, event) => {
+  const onInValid: SubmitErrorHandler<LoginForm> = (errors) => {
     console.log(errors);
-    console.log(event);
   };
 
   return (
@@ -37,14 +41,22 @@ const Forms: NextPage = () => {
         })}
         type="text"
         placeholder="Username"
+        className={errors.username && "border-orange-500"}
       />
       <input
-        {...register("email", { required: true })}
+        {...register("email", {
+          required: "Email is required",
+          validate: {
+            notGmail: (value) =>
+              !value.includes("@gmail.com") || "Do not use gmail",
+          },
+        })}
         type="email"
         placeholder="Email"
       />
+      {errors.email?.message}
       <input
-        {...register("password", { required: true })}
+        {...register("password", { required: "Password is required" })}
         type="password"
         placeholder="Password"
       />
