@@ -1,9 +1,5 @@
 import type { NextPage } from "next";
-import type {
-  SubmitErrorHandler,
-  SubmitHandler,
-  FieldValues,
-} from "react-hook-form";
+import type { SubmitErrorHandler, SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 
 type LoginForm = {
