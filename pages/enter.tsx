@@ -3,8 +3,9 @@ import type { SubmitHandler } from "react-hook-form";
 import { useState } from "react";
 import Button from "../components/button";
 import Input from "../components/input";
-import { cls } from "../libs/utils";
+import { cls } from "../libs/client/utils";
 import { useForm } from "react-hook-form";
+import useMutation from "../libs/client/useMutation";
 
 type EnterForm = {
   email?: string;
@@ -12,7 +13,7 @@ type EnterForm = {
 };
 
 const Enter: NextPage = () => {
-  const [submitting, setSubmitting] = useState(false);
+  const [enter, { loading, data, error }] = useMutation("/api/users/enter");
   const { register, reset, handleSubmit } = useForm<EnterForm>();
   const [method, setMethod] = useState<"email" | "phone">("email");
   const onEmailClick = () => {
@@ -23,17 +24,9 @@ const Enter: NextPage = () => {
     reset();
     setMethod("phone");
   };
-  const onValid: SubmitHandler<EnterForm> = (data) => {
-    setSubmitting(true);
-    fetch("/api/users/enter", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then(() => {
-      setSubmitting(false);
-    });
+  const onValid: SubmitHandler<EnterForm> = (validForm) => {
+    if (loading) return;
+    enter(validForm);
   };
   return (
     <div className="mt-16 px-4">
@@ -89,9 +82,11 @@ const Enter: NextPage = () => {
               required
             />
           ) : null}
-          {method === "email" ? <Button text={"Get login link"} /> : null}
+          {method === "email" ? (
+            <Button text={loading ? "Loading" : "Get login link"} />
+          ) : null}
           {method === "phone" ? (
-            <Button text={submitting ? "Loading" : "Get one-time password"} />
+            <Button text={loading ? "Loading" : "Get one-time password"} />
           ) : null}
         </form>
 
