@@ -5,17 +5,23 @@ import client from "@libs/server/client";
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { email, phone } = req.body;
   const payload = email ? { email } : { phone: +phone };
-  const user = await client.user.upsert({
-    where: {
-      ...payload,
+  const token = await client.token.create({
+    data: {
+      payload: "1234",
+      user: {
+        connectOrCreate: {
+          where: {
+            ...payload,
+          },
+          create: {
+            name: "anonymous",
+            ...payload,
+          },
+        },
+      },
     },
-    create: {
-      name: "anonymous",
-      ...payload,
-    },
-    update: {},
   });
-  console.log(user);
+  console.log(token);
   return res.status(200).end();
 }
 
