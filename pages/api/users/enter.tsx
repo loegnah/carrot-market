@@ -3,14 +3,14 @@ import twilio from "twilio";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
 
-const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
+// const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
 
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
   const { email, phone } = req.body;
-  const userData = email ? { email } : phone ? { phone: +phone } : null;
+  const userData = email ? { email } : phone ? { phone } : null;
   const payload = Math.floor(100000 + Math.random() * 100000) + "";
 
   if (!userData) return res.status(400).json({ ok: false });

@@ -4,9 +4,10 @@ interface InputProps {
   label: string;
   name: string;
   type: string;
-  register: UseFormRegisterReturn;
+  register?: UseFormRegisterReturn;
   required?: boolean;
   kind?: "text" | "phone" | "price";
+  placeholder?: string;
 }
 
 export default function Input({
