@@ -1,10 +1,10 @@
 import type { UseFormRegisterReturn } from "react-hook-form";
 
 interface InputProps {
+  register?: UseFormRegisterReturn;
   label: string;
   name: string;
   type: string;
-  register?: UseFormRegisterReturn;
   required?: boolean;
   kind?: "text" | "phone" | "price";
 }

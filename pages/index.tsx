@@ -3,10 +3,8 @@ import Head from "next/head";
 import FloatingButton from "@components/floating-button";
 import Item from "@components/item";
 import Layout from "@components/layout";
-import useUser from "@libs/client/useUser";
 
 const Home: NextPage = () => {
-  const { user, isLoading } = useUser();
   return (
     <Layout title="홈" hasTabBar>
       <Head>

@@ -23,13 +23,16 @@ type MutationResult = {
 
 const Enter: NextPage = () => {
   const router = useRouter();
-  const [enter, { loading, data, error }] =
+
+  const [enter, { loading, data }] =
     useMutation<MutationResult>("/api/users/enter");
-  const { register, reset, handleSubmit } = useForm<EnterForm>();
   const [confirmToken, { loading: tokenLoading, data: tokenData }] =
     useMutation<MutationResult>("/api/users/confirm");
+
+  const { register, reset, handleSubmit } = useForm<EnterForm>();
   const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
     useForm<TokenForm>();
+
   const [method, setMethod] = useState<"email" | "phone">("email");
 
   const onEmailClick = () => {
@@ -42,14 +45,14 @@ const Enter: NextPage = () => {
     setMethod("phone");
   };
 
-  const onValid: SubmitHandler<EnterForm> = (validForm) => {
+  const onValid: SubmitHandler<EnterForm> = (formData) => {
     if (loading) return;
-    enter(validForm);
+    enter(formData);
   };
 
-  const onTokenValid: SubmitHandler<TokenForm> = (validForm) => {
+  const onTokenValid: SubmitHandler<TokenForm> = (formData) => {
     if (tokenLoading) return;
-    confirmToken(validForm);
+    confirmToken(formData);
   };
 
   useEffect(() => {
