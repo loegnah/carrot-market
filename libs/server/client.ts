@@ -4,8 +4,8 @@ declare global {
   var client: PrismaClient | undefined;
 }
 
-if (!global.client) {
-  global.client = new PrismaClient();
-}
+const client = global.client || new PrismaClient();
 
-export default global.client;
+if (process.env.NODE_ENV === "development") global.client = client;
+
+export default client;
