@@ -1,19 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
+type Method = "GET" | "POST" | "DELETE";
+
 type ResponseType = {
   ok: boolean;
   [key: string]: any;
 };
 
 type WithHandlerParams = {
-  method: "GET" | "POST" | "DELETE";
+  methods: Method[];
   handler: (req: NextApiRequest, res: NextApiResponse) => void;
   isPrivate?: boolean;
 };
 
-function withHandler({ method, handler, isPrivate = true }: WithHandlerParams) {
+function withHandler({
+  methods,
+  handler,
+  isPrivate = true,
+}: WithHandlerParams) {
   return async function (req: NextApiRequest, res: NextApiResponse) {
-    if (req.method !== method) {
+    if (req.method && !methods.includes(req.method as any)) {
       return res.status(405).end();
     }
     if (isPrivate && !req.session.user) {
