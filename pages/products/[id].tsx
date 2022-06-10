@@ -1,8 +1,16 @@
 import type { NextPage } from "next";
 import Button from "@components/button";
 import Layout from "@components/layout";
+import { useRouter } from "next/router";
+import useSWR from "swr";
+import type { ProductsIdResponse } from "pages/api/products/[id]";
+import Link from "next/link";
 
 const ItemDetail: NextPage = () => {
+  const router = useRouter();
+  const { data } = useSWR<ProductsIdResponse>(
+    router.query?.id ? `/api/products/${router.query.id}` : null
+  );
   return (
     <Layout canGoBack>
       <div className="px-4  py-4">
@@ -11,15 +19,23 @@ const ItemDetail: NextPage = () => {
           <div className="flex cursor-pointer py-3 border-t border-b items-center space-x-3">
             <div className="w-12 h-12 rounded-full bg-slate-300" />
             <div>
-              <p className="text-sm font-medium text-gray-700">Steve Jebs</p>
-              <p className="text-xs font-medium text-gray-500">
-                View profile &rarr;
+              <p className="text-sm font-medium text-gray-700">
+                {data?.product?.user?.name}
               </p>
+              <Link href={`/users/profiles/${data?.product?.user?.id}`}>
+                <a className="text-xs font-medium text-gray-500">
+                  View profile &rarr;
+                </a>
+              </Link>
             </div>
           </div>
           <div className="mt-5">
-            <h1 className="text-3xl font-bold text-gray-900">Galaxy S50</h1>
-            <span className="text-2xl block mt-3 text-gray-900">$140</span>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {data?.product.name}
+            </h1>
+            <span className="text-2xl block mt-3 text-gray-900">
+              ${data?.product.price}
+            </span>
             <p className=" my-6 text-gray-700">
               My money&apos;s in that office, right? If she start giving me some
               bullshit about it ain&apos;t there, and we got to go someplace
