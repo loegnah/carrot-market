@@ -59,11 +59,13 @@ async function ProductsHandler(
     },
   });
 
-  res.json({
-    ok: true,
-    product,
-    relatedProducts,
-  });
+  setTimeout(() => {
+    res.json({
+      ok: true,
+      product,
+      relatedProducts,
+    });
+  }, 1000);
 }
 
 export default withApiSession(

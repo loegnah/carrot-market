@@ -5,7 +5,8 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import type { ProductDetailResponse } from "pages/api/products/[id]";
 import Link from "next/link";
-import Skeleton from "@components/Skeleton";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const ItemDetail: NextPage = () => {
   const router = useRouter();
@@ -14,9 +15,9 @@ const ItemDetail: NextPage = () => {
   );
   return (
     <Layout canGoBack>
-      <div className="px-4  py-4">
+      <div className="px-4 py-4">
         {!data ? (
-          <Skeleton />
+          <Skeleton count={20} />
         ) : (
           <>
             <div className="mb-8">
