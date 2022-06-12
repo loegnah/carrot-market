@@ -1,4 +1,4 @@
-const SkeletonCard = () => {
+const Skeleton = () => {
   return (
     <>
       <div className="flex w-full flex-1 flex-col items-center px-4">
@@ -22,4 +22,4 @@ const SkeletonCard = () => {
   );
 };
 
-export default SkeletonCard;
+export default Skeleton;
