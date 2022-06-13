@@ -12,6 +12,7 @@ type ProductDetailResponse = {
   ok: boolean;
   product: ProductWithUser;
   relatedProducts: Product[];
+  isFav: boolean;
 };
 
 const findProductById = async (id: number) =>
@@ -45,7 +46,10 @@ async function ProductsHandler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
-  const { id } = req.query;
+  const {
+    query: { id },
+    session: { user },
+  } = req;
 
   const product = await findProductById(+id);
   if (!product) return res.status(404).end();
@@ -59,13 +63,24 @@ async function ProductsHandler(
     },
   });
 
-  setTimeout(() => {
-    res.json({
-      ok: true,
-      product,
-      relatedProducts,
-    });
-  }, 1000);
+  const isFav = Boolean(
+    await client.fav.findFirst({
+      where: {
+        productId: product?.id,
+        userId: user?.id,
+      },
+      select: {
+        id: true,
+      },
+    })
+  );
+
+  res.json({
+    ok: true,
+    product,
+    relatedProducts,
+    isFav,
+  });
 }
 
 export default withApiSession(
