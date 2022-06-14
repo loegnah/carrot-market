@@ -9,8 +9,10 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
+import useUser from "@libs/client/useUser";
 
 const ItemDetail: NextPage = () => {
+  useUser();
   const router = useRouter();
   const { data, mutate } = useSWR<ProductDetailResponse>(
     router.query?.id ? `/api/products/${router.query.id}` : null
@@ -20,7 +22,6 @@ const ItemDetail: NextPage = () => {
     if (!data) return;
     mutate({ ...data, isFav: !data.isFav }, false);
     toggleFav({});
-    // toggleFav({});
   };
   return (
     <Layout canGoBack>

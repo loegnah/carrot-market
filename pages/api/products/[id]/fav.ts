@@ -44,7 +44,7 @@ async function favHandler(
 
 export default withApiSession(
   withHandler({
-    methods: ["GET"],
+    methods: ["POST"],
     handler: favHandler,
   })
 );

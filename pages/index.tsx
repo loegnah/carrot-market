@@ -5,6 +5,7 @@ import Item from "@components/item";
 import Layout from "@components/layout";
 import useSWR from "swr";
 import type { Product } from "@prisma/client";
+import useUser from "@libs/client/useUser";
 
 type ProductsResponse = {
   ok: boolean;
@@ -12,8 +13,8 @@ type ProductsResponse = {
 };
 
 const Home: NextPage = () => {
+  useUser();
   const { data } = useSWR<ProductsResponse>("/api/products");
-  console.log(data);
   return (
     <Layout title="홈" hasTabBar>
       <Head>
