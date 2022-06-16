@@ -9,7 +9,15 @@ async function ProductsHandler(
 ) {
   switch (req.method) {
     case "GET":
-      const products = await client.product.findMany({});
+      const products = await client.product.findMany({
+        include: {
+          _count: {
+            select: {
+              Fav: true,
+            },
+          },
+        },
+      });
       res.json({
         ok: true,
         products,
