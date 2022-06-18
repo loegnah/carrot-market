@@ -9,7 +9,7 @@ import useUser from "@libs/client/useUser";
 
 interface ProductsWithCount extends Product {
   _count: {
-    Fav: number;
+    favs: number;
   };
 }
 
@@ -33,7 +33,7 @@ const Home: NextPage = () => {
             key={product.id}
             title={product.name}
             price={product.price}
-            hearts={product._count.Fav}
+            hearts={product._count.favs}
           />
         ))}
         <FloatingButton href="/products/upload">

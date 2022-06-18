@@ -13,11 +13,12 @@ async function ProductsHandler(
         include: {
           _count: {
             select: {
-              Fav: true,
+              favs: true,
             },
           },
         },
       });
+      console.log(products);
       res.json({
         ok: true,
         products,
