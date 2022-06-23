@@ -27,6 +27,7 @@ async function postsDetailHandler(
         select: {
           answer: true,
           id: true,
+          createdAt: true,
           user: {
             select: {
               id: true,

@@ -8,6 +8,8 @@ import Link from "next/link";
 import useMutation from "@libs/client/useMutation";
 import _ from "lodash";
 import { cls } from "@libs/client/utils";
+import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 
 interface AnswerWithUser extends Answer {
   user: User;
@@ -28,12 +30,27 @@ interface CommunityPostResponse {
   isWondering: boolean;
 }
 
+interface AnswerFrom {
+  answer: string;
+}
+
+interface AnswerResponse {
+  ok: boolean;
+  response: Answer;
+}
+
 const CommunityPostDetail: NextPage = () => {
   const router = useRouter();
+  const { register, handleSubmit, reset } = useForm<AnswerFrom>();
   const { data, mutate } = useSWR<CommunityPostResponse>(
     router.query.id ? `/api/posts/${router.query.id}` : null
   );
-  const [wonder] = useMutation(`/api/posts/${router.query.id}/wonder`);
+  const [wonder, { loading }] = useMutation(
+    `/api/posts/${router.query.id}/wonder`
+  );
+  const [sendAnswer, { data: answerData, loading: answerLoading }] =
+    useMutation<AnswerResponse>(`/api/posts/${router.query.id}/answer`);
+
   const onWonderClick = () => {
     if (!data) return;
     mutate(
@@ -48,9 +65,20 @@ const CommunityPostDetail: NextPage = () => {
         .value(),
       false
     );
-
-    wonder({});
+    if (!loading) {
+      wonder({});
+    }
   };
+
+  const onValid = (form: AnswerFrom) => {
+    if (answerLoading) return;
+    sendAnswer(form);
+  };
+
+  useEffect(() => {
+    if (answerData && answerData.ok) reset();
+  }, [answerData, reset]);
+
   return (
     <Layout canGoBack>
       <div>
@@ -127,23 +155,24 @@ const CommunityPostDetail: NextPage = () => {
                   {answer.user.name}
                 </span>
                 <span className="text-xs text-gray-500 block ">
-                  {answer.createdAt.toString()}
+                  {answer.createdAt.toString().replace("T", " ").slice(0, -1)}
                 </span>
                 <p className="text-gray-700 mt-2">{answer.answer} </p>
               </div>
             </div>
           ))}
         </div>
-        <div className="px-4">
+        <form className="px-4" onSubmit={handleSubmit(onValid)}>
           <TextArea
             name="description"
             placeholder="Answer this question!"
+            register={register("answer", { required: true, minLength: 5 })}
             required
           />
           <button className="mt-2 w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none ">
-            Reply
+            {answerLoading ? "Loading..." : "Reply"}
           </button>
-        </div>
+        </form>
       </div>
     </Layout>
   );
