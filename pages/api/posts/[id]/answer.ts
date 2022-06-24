@@ -28,7 +28,6 @@ async function postAnswerHandler(
       answer,
     },
   });
-  console.log(newAnswer);
   res.json({
     ok: true,
     answer: newAnswer,

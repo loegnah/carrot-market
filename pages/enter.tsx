@@ -56,7 +56,10 @@ const Enter: NextPage = () => {
   };
 
   useEffect(() => {
+    console.log("aaaaaaaaaaaaaaaaa");
     if (tokenData?.ok) {
+      console.log("bbbbbbbbbbbbbbb");
+
       router.push("/");
     }
   }, [tokenData, router]);
