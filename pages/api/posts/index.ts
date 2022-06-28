@@ -23,12 +23,14 @@ async function handlePost(
   res: NextApiResponse<ResponseType>
 ) {
   const {
-    body: { question },
+    body: { question, longitude, latitude },
     session: { user },
   } = req;
   const post = await client.post.create({
     data: {
       question,
+      longitude,
+      latitude,
       user: {
         connect: {
           id: user?.id,
