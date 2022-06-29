@@ -48,6 +48,12 @@ async function handleGet(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
+  const {
+    query: { longitude, latitude },
+  } = req;
+  const parsedLatitude = parseFloat(latitude.toString());
+  const parsedLongitude = parseFloat(longitude.toString());
+
   const posts = await client.post.findMany({
     include: {
       user: {
@@ -62,6 +68,16 @@ async function handleGet(
           wondering: true,
           answers: true,
         },
+      },
+    },
+    where: {
+      latitude: {
+        gte: parsedLatitude - 0.01,
+        lte: parsedLatitude + 0.01,
+      },
+      longitude: {
+        gte: parsedLongitude - 0.01,
+        lte: parsedLongitude + 0.01,
       },
     },
   });
